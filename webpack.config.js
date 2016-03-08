@@ -1,5 +1,19 @@
 var webpack = require('webpack');
 var cleanBuild = require('clean-webpack-plugin');
+var path = require('path');
+var fs = require('fs');
+
+// Keep Node out of the build. See:
+// http://jlongster.com/Backend-Apps-with-Webpack--Part-I
+// https://github.com/webpack/webpack/issues/839
+var nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter(function(x) {
+    return ['.bin'].indexOf(x) === -1;
+  })
+  .forEach(function(mod) {
+    nodeModules[mod] = 'commonjs ' + mod;
+  });
 
 module.exports = {
   context: __dirname + '/src',
@@ -8,6 +22,8 @@ module.exports = {
     filename: 'index.min.js',
     path: __dirname + '/dist'
   },
+  target: "node",
+  externals: nodeModules,
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
@@ -24,11 +40,6 @@ module.exports = {
       }
     ]
   },
-  node: {
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-  },
   plugins: [
     // Cleans the Dist folder after every build.
     new cleanBuild(['dist']),
@@ -40,4 +51,4 @@ module.exports = {
       }
     })
   ]
-}
+};
