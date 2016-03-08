@@ -2,7 +2,7 @@
   "name": "dgx-loggly",
   "version": "0.0.1",
   "description": "Loggly logging for Node apps",
-  "main": "src/index.js",
+  "main": "./dist/index.min.js",
   "scripts": {
     "build": "node_modules/.bin/webpack -p --config webpack.config.js"
   },
