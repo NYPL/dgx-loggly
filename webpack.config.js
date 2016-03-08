@@ -20,7 +20,10 @@ module.exports = {
   entry: './index.js',
   output: {
     filename: 'index.min.js',
-    path: __dirname + '/dist'
+    path: __dirname + '/dist',
+    libraryTarget: "umd",
+    // name of the global var
+    library: "dgxLoggly"
   },
   target: "node",
   externals: nodeModules,
