@@ -1,53 +1,56 @@
 import Winston from 'winston';
 import 'winston-loggly';
 
-class Logger {
-  constructor(env, token = null, subdomain = null) {
-    this.nodeEnv = env;
-    this.logglyToken = token;
-    this.logglySubdomain = subdomain;
-  }
 
-  buildLoggly() {
-    if (this.logglyToken && this.logglySubdomain) {
-      return new Winston.transports.Loggly({
-        level: 'error',
-        handleExceptions: true,
-        inputToken: this.logglyToken,
-        subdomain: this.logglySubdomain,
-        tags: ['Header-App'],
-        json: false,
-        stripColors: true,
-      });
-    }
+const defaults = {
+  console: {
+    level: 'debug',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
+  },
+  loggly: {
+    level: 'error',
+    handleExceptions: true,
+    json: false,
+    stripColors: true,
+  },
+};
 
-    return null;
-  }
-
-  buildConsole() {
-    return new Winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      json: false,
-      colorize: true,
-    });
-  }
-
-  build() {
-    const logglyTransport = this.buildLoggly();
-    // If lack of token or subdomain, just don't stat any transport on production
-    let transportsArray = (logglyTransport) ? [logglyTransport] : [];
-
-    // Always have Winston.transports.Console with on development
-    if (this.nodeEnv !== 'production') {
-      transportsArray = [this.buildConsole()];
-    }
-
-    return new Winston.Logger({
-      transports: transportsArray,
-      exitOnError: false,
-    });
-  }
+function logglyConfig(opts) {
+  return new Winston.transports.Loggly(
+    Object.assign({}, defaults.loggly, opts.loggly)
+  );
 }
 
-export default Logger;
+function consoleConfig(opts) {
+  return new Winston.transports.Console(
+    Object.assign({}, defaults.console, opts.console)
+  );
+}
+
+function getTransports(env, opts) {
+  const { remote } = opts;
+  if (env) {
+    // Production apps should only use loggly
+    if (env === 'production') {
+      return [logglyConfig(opts)];
+    }
+
+    // If it isn;t production but the `remote` flag is set
+    // send to loggly and console
+    if (remote) {
+      return [logglyConfig(opts), consoleConfig(opts)];
+    }
+  }
+
+  // Otherwise, just log to the console
+  return [consoleConfig(opts)];
+}
+
+function getLogger(tag, env = null, token = null, subdomain = null, opts = {}) {
+  const transports = getTransports(env, opts);
+  return new Winston.Logger({transports: transports});
+}
+
+export default getLogger;

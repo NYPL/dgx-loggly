@@ -1,5 +1,3 @@
-import Logger from './utils/Logger.js';
+import getLogger from './utils/Logger.js';
 
-export default {
-  logger: Logger,
-};
+export default getLogger;
