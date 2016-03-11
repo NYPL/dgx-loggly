@@ -7,12 +7,12 @@ chai.should();
 chai.use(sinonChai);
 
 describe('logger', () => {
-    it('works', () => {
-	var myLogger = getLogger();
-//	var myLogger = lgr.getLogger();
-
-	var sp = sinon.stub(myLogger, "log");
-	myLogger.log('debug', 'TEST');
-	sp.should.have.been.calledWith('debug', 'TEST');
+  describe('with no parameters', () => {
+    it('only configures a console logger', () => {
+      const myLogger = getLogger();
+      Object.keys(myLogger.transports).length.should.equal(1);
+      Object.keys(myLogger.transports).should.eql(['console']);
     });
+  });
 });
+
