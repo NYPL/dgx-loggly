@@ -78,8 +78,7 @@ function getTransports(opts) {
 }
 
 function getLogger(opts = {}) {
-  const transports = getTransports(opts);
-  return new Winston.Logger({transports: transports});
+  return new Winston.Logger({transports: getTransports(opts)});
 }
 
 export default getLogger;
