@@ -44,14 +44,11 @@ function mergeTags(opts) {
     
 function logglyConfig(opts) {
   return new Winston.transports.Loggly(
-    Object.assign({}, defaults.loggly, opts)
-  );
-}
-
-function logglyOptions(opts) {
-  return Object.assign(
-    opts,
-    { tags: mergeTags(opts) }
+    Object.assign(
+      defaults.loggly,
+      opts,
+      { tags: mergeTags(opts) }
+    )
   );
 }
 
