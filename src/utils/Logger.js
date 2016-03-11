@@ -27,21 +27,21 @@ function envTag(opts) {
       return [appTag + '-' + env];
     }
 
-    return [appTag]
+    return [appTag];
   }
 
   return [];
 }
 
 function mergeTags(opts) {
-  const { tags, appTag } = opts;
+  const { tags } = opts;
   if (Array.isArray(tags)) {
     return [].concat(tags, envTag(opts));
   }
 
   return envTag(opts);
 }
-    
+
 function logglyConfig(opts) {
   return new Winston.transports.Loggly(
     Object.assign(
@@ -63,16 +63,13 @@ function getTransports(opts) {
   if (env) {
     // Production apps should only use loggly
     if (env === 'production') {
-      return [logglyConfig(logglyOptions(opts))];
+      return [logglyConfig(opts)];
     }
 
     // If it isn't production but the `remote` flag is set
     // send to loggly and console
     if (remote) {
-      return [
-	consoleConfig(opts),
-	logglyConfig(logglyOptions(opts)),
-      ];
+      return [consoleConfig(opts), logglyConfig(opts)];
     }
   }
 
