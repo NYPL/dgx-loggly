@@ -23,8 +23,9 @@
     "url": "git+https://bitbucket.org/NYPL/dgx-loggly.git"
   },
   "keywords": [
-    "webpack",
-    "boilerplate"
+    "logging",
+    "winston",
+    "loggly",
   ],
   "bugs": {
     "url": "https://bitbucket.org/NYPL/dgx-loggly/issues"
