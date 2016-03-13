@@ -1,10 +1,7 @@
 import chai from "chai";
 import getLogger from '../src/index.js';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 
 chai.should();
-chai.use(sinonChai);
 
 /** @test {getLogger} */
 describe('getLogger', () => {
@@ -202,22 +199,6 @@ describe('getLogger', () => {
           });
         });
       });
-    });
-  });
-  
-  describe('logging', () => {
-    it('logs debug level messages with log()', () => {
-      var myLogger = getLogger();
-      var sp = sinon.stub(myLogger, "log");
-      myLogger.log('debug', 'TEST');
-      sp.should.have.been.calledWith('debug', 'TEST');
-    });
-
-    it('logs debug level messages with debug()', () => {
-      var myLogger = getLogger();
-      var sp = sinon.stub(myLogger, "log");
-      myLogger.debug('TEST');
-      sp.should.have.been.calledWith('debug', 'TEST');
     });
   });
 });
