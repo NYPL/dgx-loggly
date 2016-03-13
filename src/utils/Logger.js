@@ -20,7 +20,7 @@ const defaults = {
 /**
  * Combine appTag with environment for non-production environments
  * @param {Object} opts
- * @return {string[]} Array consisting of the environment-enhanced tag. If 
+ * @return {string[]} Array consisting of the environment-enhanced tag. If
  * `env` or `appTag` is not set, an empty array.
  */
 function envTag(opts) {
@@ -37,7 +37,7 @@ function envTag(opts) {
 }
 
 /**
- * Merge `opts.appTag` with array of other tags in `opts.tags` if it 
+ * Merge `opts.appTag` with array of other tags in `opts.tags` if it
  * exists. Otherwise return an array of just `opts.appTag` to be passed
  * to a Loggly transport.
  * @param {Object} opts
@@ -56,7 +56,7 @@ function mergeTags(opts) {
  * Create a Loggly transport
  * @param {Object} opts
  * @return {Object}
- */ 
+ */
 function logglyConfig(opts) {
   return new Winston.transports.Loggly(
     Object.assign(
@@ -73,7 +73,7 @@ function logglyConfig(opts) {
  * Create a Console transport
  * @param {Object} opts
  * @return {Object}
- */ 
+ */
 function consoleConfig(opts) {
   return new Winston.transports.Console(
     Object.assign({}, defaults.console, opts, opts.console)
@@ -108,23 +108,23 @@ function getTransports(opts) {
 
 /**
  * Get a Winston logger, configured to log to console or Loggly depending on
- * environment and options. If no `opts` is given or it it empty, logger 
+ * environment and options. If no `opts` is given or it it empty, logger
  * will be configured for console logging of `debug` level messages.
  *
  * @param {Object} [opts={}] Options hash.
- * @param {string} opts.env Running app environment. If present, one of 
- *   "development", "qa", or "production." If there is no environment set, 
- *   logging will be to console irrespective of other setting. If the 
+ * @param {string} opts.env Running app environment. If present, one of
+ *   "development", "qa", or "production." If there is no environment set,
+ *   logging will be to console irrespective of other setting. If the
  *   environment is "production" only Loggly will be configured.
  * @param {boolean} opts.remote If true, log "qa" and "development"
  *    environments to Loggly.
- * @param {string} opts.appTag (Loggly only) Main tag for Loggly messages. If 
+ * @param {string} opts.appTag (Loggly only) Main tag for Loggly messages. If
  *   the environment is "qa" or "development", the environment is appended to
  *   the tag with a hyphen (e.g. "MyApp-qa"). Additional tags may be specified
  *   via the `tags` parameter.
- * @param {string} opts.token (Loggly only) Token required for connecting to 
+ * @param {string} opts.token (Loggly only) Token required for connecting to
  *   Loggly
- * @param {string} opts.subdomain (Loggly only) Subdomain required for 
+ * @param {string} opts.subdomain (Loggly only) Subdomain required for
  *   connecting to Loggly.
  * @param {Object} opts.console (Console only) Console transport specific
  *   overrides
