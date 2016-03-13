@@ -126,6 +126,10 @@ function getTransports(opts) {
  *   Loggly
  * @param {string} opts.subdomain (Loggly only) Subdomain required for 
  *   connecting to Loggly.
+ * @param {Object} opts.console (Console only) Console transport specific
+ *   overrides
+ * @param {Object} opts.loggly (Loggly only) Loggly transport specific
+ *   overrides
  * @return {Object} A Winston logger object.
  */
 function getLogger(opts = {}) {

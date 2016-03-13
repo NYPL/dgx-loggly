@@ -80,5 +80,18 @@ together:
       json: true,
     });
 
+### For specific transports
 
+To override defaults for one transport but not another, add the overrides to a
+`console` or `loggly` property in the `getLogger()` options. For example, to
+enable json logging for a loggly but not a console transport:
+
+    const myLogger = getLogger({
+      env: 'qa',
+	  appTag: 'TEST',
+	  token: 'TOKEN',
+	  subdomain: 'SUBDOMAIN',
+	  remote: true,
+      loggly: { json: true, },
+    });
 
