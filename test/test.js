@@ -1,4 +1,5 @@
-import chai from "chai";
+/* global before it describe */
+import chai from 'chai';
 import getLogger from '../src/index.js';
 
 chai.should();
@@ -15,7 +16,7 @@ describe('getLogger', () => {
 
   describe('with an environment', () => {
     describe('with production', () => {
-      var myLogger;
+      let myLogger;
       before(() => {
         myLogger = getLogger({
           env: 'production',
@@ -41,13 +42,11 @@ describe('getLogger', () => {
       it('has the right tag', () => {
         myLogger.transports.loggly.client.tags.should.include('TEST');
       });
-
     });
 
     describe('with qa', () => {
       describe('without the remote option', () => {
-        
-        var myLogger;
+        let myLogger;
         before(() => {
           myLogger = getLogger({
             env: 'qa',
@@ -56,7 +55,7 @@ describe('getLogger', () => {
             subdomain: 'SUBDOMAIN',
           });
         });
-        
+
         it('only configures a console logger', () => {
           Object.keys(myLogger.transports).length.should.equal(1);
           Object.keys(myLogger.transports).should.eql(['console']);
@@ -64,7 +63,7 @@ describe('getLogger', () => {
       });
 
       describe('with the remote option', () => {
-        var myLogger;
+        let myLogger;
 
         before(() => {
           myLogger = getLogger({
@@ -91,8 +90,7 @@ describe('getLogger', () => {
 
   describe('with configuration defaults', () => {
     describe('when not overriden', () => {
-
-      var myLogger;
+      let myLogger;
       before(() => {
         myLogger = getLogger({
           env: 'qa',
@@ -102,7 +100,7 @@ describe('getLogger', () => {
           remote: true,
         });
       });
-      
+
       describe('console', () => {
         it('has the defaults', () => {
           myLogger.transports.console.json.should.equal(false);
@@ -119,8 +117,7 @@ describe('getLogger', () => {
 
     describe('when overriden', () => {
       describe('by general options', () => {
-
-        var myLogger;
+        let myLogger;
         before(() => {
           myLogger = getLogger({
             env: 'qa',
@@ -146,8 +143,7 @@ describe('getLogger', () => {
       });
 
       describe('by console specific options', () => {
-        
-        var myLogger;
+        let myLogger;
         before(() => {
           myLogger = getLogger({
             env: 'qa',
@@ -155,7 +151,7 @@ describe('getLogger', () => {
             token: 'TOKEN',
             subdomain: 'SUBDOMAIN',
             remote: true,
-            console: { json: true, },
+            console: { json: true },
           });
         });
 
@@ -174,8 +170,7 @@ describe('getLogger', () => {
       });
 
       describe('by loggly specific options', () => {
-
-        var myLogger;
+        let myLogger;
         before(() => {
           myLogger = getLogger({
             env: 'qa',
@@ -183,7 +178,7 @@ describe('getLogger', () => {
             token: 'TOKEN',
             subdomain: 'SUBDOMAIN',
             remote: true,
-            loggly: { json: true, },
+            loggly: { json: true },
           });
         });
 
