@@ -63,6 +63,7 @@ function logglyConfig(opts) {
       {},
       defaults.loggly,
       opts,
+      opts.loggly,
       { tags: mergeTags(opts) }
     )
   );

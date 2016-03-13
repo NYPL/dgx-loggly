@@ -175,6 +175,33 @@ describe('getLogger', () => {
           });
         });
       });
+
+      describe('by loggly specific options', () => {
+
+        var myLogger;
+	before(() => {
+ 	  myLogger = getLogger({
+	    env: 'qa',
+	    appTag: 'TEST',
+	    token: 'TOKEN',
+	    subdomain: 'SUBDOMAIN',
+	    remote: true,
+            loggly: { json: true, },
+	  });
+	});
+
+        describe('console', () => {
+          it('has the default', () => {
+            myLogger.transports.console.json.should.equal(false);
+          });
+        });
+
+        describe('loggly', () => {
+          it('has the specific override', () => {
+            myLogger.transports.loggly.client.json.should.equal(true);
+          });
+        });
+      });
     });
   });
   
