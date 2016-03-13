@@ -70,7 +70,7 @@ describe('getLogger', () => {
 	var myLogger;
 
 	before(() => {
-	  myLogger = getLogger({
+ 	  myLogger = getLogger({
 	    env: 'qa',
 	    appTag: 'TEST',
 	    token: 'TOKEN',
@@ -92,6 +92,46 @@ describe('getLogger', () => {
     });
   });
 
+  describe('with configuration defaults', () => {
+    describe('not overriden', () => {
+      describe('console', () => {
+        it('has the defaults', () => {
+          const myLogger = getLogger();
+          myLogger.transports.console.json.should.equal(false);
+        });
+      });
+    });
+
+    describe('overriden', () => {
+      describe('by general options', () => {
+
+        var myLogger;
+	before(() => {
+ 	  myLogger = getLogger({
+	    env: 'qa',
+	    appTag: 'TEST',
+	    token: 'TOKEN',
+	    subdomain: 'SUBDOMAIN',
+	    remote: true,
+            json: true,
+	  });
+	});
+
+        describe('console', () => {
+          it('has the general override', () => {
+            myLogger.transports.console.json.should.equal(true);
+          });
+        });
+
+        describe('loggly', () => {
+          it('has the general override', () => {
+            myLogger.transports.loggly.client.json.should.equal(true);
+          });
+        });
+      });
+    });
+  });
+  
   describe('logging', () => {
     it('logs debug level messages with log()', () => {
       var myLogger = getLogger();

@@ -74,7 +74,7 @@ function logglyConfig(opts) {
  */ 
 function consoleConfig(opts) {
   return new Winston.transports.Console(
-    Object.assign({}, defaults.console, opts.console)
+    Object.assign({}, defaults.console, opts)
   );
 }
 
