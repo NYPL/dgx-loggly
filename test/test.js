@@ -6,7 +6,8 @@ import sinonChai from 'sinon-chai';
 chai.should();
 chai.use(sinonChai);
 
-describe('logger', () => {
+/** @test {getLogger} */
+describe('getLogger', () => {
   describe('with no parameters', () => {
     it('only configures a console logger', () => {
       const myLogger = getLogger();
@@ -88,6 +89,22 @@ describe('logger', () => {
 	  myLogger.transports.loggly.client.tags.should.include('TEST-qa');
 	});
       });
+    });
+  });
+
+  describe('logging', () => {
+    it('logs debug level messages with log()', () => {
+      var myLogger = getLogger();
+      var sp = sinon.stub(myLogger, "log");
+      myLogger.log('debug', 'TEST');
+      sp.should.have.been.calledWith('debug', 'TEST');
+    });
+
+    it('logs debug level messages with debug()', () => {
+      var myLogger = getLogger();
+      var sp = sinon.stub(myLogger, "log");
+      myLogger.debug('TEST');
+      sp.should.have.been.calledWith('debug', 'TEST');
     });
   });
 });
