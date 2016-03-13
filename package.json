@@ -25,7 +25,7 @@
   "keywords": [
     "logging",
     "winston",
-    "loggly",
+    "loggly"
   ],
   "bugs": {
     "url": "https://bitbucket.org/NYPL/dgx-loggly/issues"
