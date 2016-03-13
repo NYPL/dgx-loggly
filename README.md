@@ -58,4 +58,27 @@ See [winston](https://github.com/winstonjs/winston) documentation for more.
 * json: `false`
 * stripColors: `true`
 
+## Overriding defaults
+
+### For every transport
+
+Loggly transport configuration options that should apply to any transport can
+simply be specified as options to `getLogger()`. For instance to enable json
+logging for the default console transport:
+
+    const myLogger = getLogger({json: true});
+
+The same would override the default for console and Loggly transports when used
+together:
+
+    const myLogger = getLogger({
+      env: 'qa',
+	  appTag: 'TEST',
+	  token: 'TOKEN',
+	  subdomain: 'SUBDOMAIN',
+	  remote: true,
+      json: true,
+    });
+
+
 
