@@ -17,74 +17,74 @@ describe('getLogger', () => {
     describe('with production', () => {
       var myLogger;
       before(() => {
-	myLogger = getLogger({
-	  env: 'production',
-	  appTag: 'TEST',
-	  token: 'TOKEN',
-	  subdomain: 'SUBDOMAIN',
-	});
+        myLogger = getLogger({
+          env: 'production',
+          appTag: 'TEST',
+          token: 'TOKEN',
+          subdomain: 'SUBDOMAIN',
+        });
       });
 
       it('only configures a loggly logger', () => {
-	Object.keys(myLogger.transports).length.should.equal(1);
-	Object.keys(myLogger.transports).should.eql(['loggly']);
+        Object.keys(myLogger.transports).length.should.equal(1);
+        Object.keys(myLogger.transports).should.eql(['loggly']);
       });
 
       it('has the right token', () => {
-	myLogger.transports.loggly.client.token.should.equal('TOKEN');
+        myLogger.transports.loggly.client.token.should.equal('TOKEN');
       });
 
       it('has the right subdomain', () => {
-	myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
+        myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
       });
 
       it('has the right tag', () => {
-	myLogger.transports.loggly.client.tags.should.include('TEST');
+        myLogger.transports.loggly.client.tags.should.include('TEST');
       });
 
     });
 
     describe('with qa', () => {
       describe('without the remote option', () => {
-	
-	var myLogger;
-	before(() => {
-	  myLogger = getLogger({
-	    env: 'qa',
-	    appTag: 'TEST',
-	    token: 'TOKEN',
-	    subdomain: 'SUBDOMAIN',
-	  });
-	});
-	
-	it('only configures a console logger', () => {
-	  Object.keys(myLogger.transports).length.should.equal(1);
-	  Object.keys(myLogger.transports).should.eql(['console']);
-	});
+        
+        var myLogger;
+        before(() => {
+          myLogger = getLogger({
+            env: 'qa',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+          });
+        });
+        
+        it('only configures a console logger', () => {
+          Object.keys(myLogger.transports).length.should.equal(1);
+          Object.keys(myLogger.transports).should.eql(['console']);
+        });
       });
 
       describe('with the remote option', () => {
-	var myLogger;
+        var myLogger;
 
-	before(() => {
- 	  myLogger = getLogger({
-	    env: 'qa',
-	    appTag: 'TEST',
-	    token: 'TOKEN',
-	    subdomain: 'SUBDOMAIN',
-	    remote: true,
-	  });
-	});
+        before(() => {
+          myLogger = getLogger({
+            env: 'qa',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+            remote: true,
+          });
+        });
 
-	it('configures console and loggly loggers', () => {
-	  Object.keys(myLogger.transports).length.should.equal(2);
-	  Object.keys(myLogger.transports)
-	    .should.have.members(['console', 'loggly']);
-	});
+        it('configures console and loggly loggers', () => {
+          Object.keys(myLogger.transports).length.should.equal(2);
+          Object.keys(myLogger.transports)
+            .should.have.members(['console', 'loggly']);
+        });
 
-	it('env tags', () => {
-	  myLogger.transports.loggly.client.tags.should.include('TEST-qa');
-	});
+        it('env tags', () => {
+          myLogger.transports.loggly.client.tags.should.include('TEST-qa');
+        });
       });
     });
   });
@@ -95,11 +95,11 @@ describe('getLogger', () => {
       var myLogger;
       before(() => {
         myLogger = getLogger({
-	  env: 'qa',
-	  appTag: 'TEST',
-	  token: 'TOKEN',
-	  subdomain: 'SUBDOMAIN',
-	  remote: true,
+          env: 'qa',
+          appTag: 'TEST',
+          token: 'TOKEN',
+          subdomain: 'SUBDOMAIN',
+          remote: true,
         });
       });
       
@@ -112,7 +112,7 @@ describe('getLogger', () => {
       describe('loggly', () => {
         it('has the defaults', () => {
           // winston-loggly accepts false, but node-loggly makes it null
-	  (myLogger.transports.loggly.client.json === null).should.equal(true);
+          (myLogger.transports.loggly.client.json === null).should.equal(true);
         });
       });
     });
@@ -121,16 +121,16 @@ describe('getLogger', () => {
       describe('by general options', () => {
 
         var myLogger;
-	before(() => {
- 	  myLogger = getLogger({
-	    env: 'qa',
-	    appTag: 'TEST',
-	    token: 'TOKEN',
-	    subdomain: 'SUBDOMAIN',
-	    remote: true,
+        before(() => {
+          myLogger = getLogger({
+            env: 'qa',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+            remote: true,
             json: true,
-	  });
-	});
+          });
+        });
 
         describe('console', () => {
           it('has the general override', () => {
@@ -148,16 +148,16 @@ describe('getLogger', () => {
       describe('by console specific options', () => {
         
         var myLogger;
-	before(() => {
- 	  myLogger = getLogger({
-	    env: 'qa',
-	    appTag: 'TEST',
-	    token: 'TOKEN',
-	    subdomain: 'SUBDOMAIN',
-	    remote: true,
+        before(() => {
+          myLogger = getLogger({
+            env: 'qa',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+            remote: true,
             console: { json: true, },
-	  });
-	});
+          });
+        });
 
         describe('console', () => {
           it('has the specific override', () => {
@@ -176,16 +176,16 @@ describe('getLogger', () => {
       describe('by loggly specific options', () => {
 
         var myLogger;
-	before(() => {
- 	  myLogger = getLogger({
-	    env: 'qa',
-	    appTag: 'TEST',
-	    token: 'TOKEN',
-	    subdomain: 'SUBDOMAIN',
-	    remote: true,
+        before(() => {
+          myLogger = getLogger({
+            env: 'qa',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+            remote: true,
             loggly: { json: true, },
-	  });
-	});
+          });
+        });
 
         describe('console', () => {
           it('has the default', () => {
