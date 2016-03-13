@@ -60,6 +60,7 @@ function mergeTags(opts) {
 function logglyConfig(opts) {
   return new Winston.transports.Loggly(
     Object.assign(
+      {},
       defaults.loggly,
       opts,
       { tags: mergeTags(opts) }
@@ -74,7 +75,7 @@ function logglyConfig(opts) {
  */ 
 function consoleConfig(opts) {
   return new Winston.transports.Console(
-    Object.assign({}, defaults.console, opts)
+    Object.assign({}, defaults.console, opts, opts.console)
   );
 }
 

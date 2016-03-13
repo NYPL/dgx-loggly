@@ -93,16 +93,34 @@ describe('getLogger', () => {
   });
 
   describe('with configuration defaults', () => {
-    describe('not overriden', () => {
+    describe('when not overriden', () => {
+
+      var myLogger;
+      before(() => {
+        myLogger = getLogger({
+	  env: 'qa',
+	  appTag: 'TEST',
+	  token: 'TOKEN',
+	  subdomain: 'SUBDOMAIN',
+	  remote: true,
+        });
+      });
+      
       describe('console', () => {
         it('has the defaults', () => {
-          const myLogger = getLogger();
           myLogger.transports.console.json.should.equal(false);
+        });
+      });
+
+      describe('loggly', () => {
+        it('has the defaults', () => {
+          // winston-loggly accepts false, but node-loggly makes it null
+	  (myLogger.transports.loggly.client.json === null).should.equal(true);
         });
       });
     });
 
-    describe('overriden', () => {
+    describe('when overriden', () => {
       describe('by general options', () => {
 
         var myLogger;
@@ -126,6 +144,34 @@ describe('getLogger', () => {
         describe('loggly', () => {
           it('has the general override', () => {
             myLogger.transports.loggly.client.json.should.equal(true);
+          });
+        });
+      });
+
+      describe('by console specific options', () => {
+        
+        var myLogger;
+	before(() => {
+ 	  myLogger = getLogger({
+	    env: 'qa',
+	    appTag: 'TEST',
+	    token: 'TOKEN',
+	    subdomain: 'SUBDOMAIN',
+	    remote: true,
+            console: { json: true, },
+	  });
+	});
+
+        describe('console', () => {
+          it('has the specific override', () => {
+            myLogger.transports.console.json.should.equal(true);
+          });
+        });
+
+        describe('loggly', () => {
+          it('has the default', () => {
+            // winston-loggly accepts false, but node-loggly makes it null
+            (myLogger.transports.loggly.client.json === null).should.equal(true);
           });
         });
       });
