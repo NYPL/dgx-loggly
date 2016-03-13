@@ -41,3 +41,21 @@ Any Loggly options can passed. See
 	logger.debug('What just happened?');
 
 See [winston](https://github.com/winstonjs/winston) documentation for more.
+
+## Defaults
+
+### Console
+
+* level: `'debug'`
+* handleExceptions: `true`
+* json: `false`
+* colorize: `true`
+
+### Loggly
+
+* level: `'error'`
+* handleExceptions: `true`
+* json: `false`
+* stripColors: `true`
+
+
