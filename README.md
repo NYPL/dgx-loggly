@@ -1,14 +1,25 @@
 # DGX Loggly
 
-Conveniently create a Winston logger with one of a few configurations for different environments, for logging to the console or to Loggly.
+Conveniently create a Winston logger and morgan HTTP request logger
+with one of a few configurations for different environments, for
+logging to the console or to Loggly.
 
 ## Usage
 
 The default configuration logs to the console for development:
 
-    import getLogger from 'dgx-loggly';
+    import { getLogger, initMorgan } from 'dgx-loggly';
 
-	const logger = getLogger();
+    # Set up Winston logging to console and/or Loggly
+    const logger = getLogger();
+
+    # For expressjs, set up morgan middleware
+    app.use(initMorgan(logger));
+
+By default, `initMorgan()` configures
+[morgan](https://github.com/expressjs/morgan) to send Apache combined
+logs to Loggly for any requests that result in 400 response code or
+higher.
 
 Loggly options can be provided to set up logging for production:
 

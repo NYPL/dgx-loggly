@@ -1,3 +1,3 @@
-import getLogger from './utils/Logger.js';
+import { getLogger, initMorgan }  from './utils/Logger.js';
 
-export default getLogger;
+export {getLogger, initMorgan };

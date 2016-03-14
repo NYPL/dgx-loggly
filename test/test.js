@@ -1,6 +1,6 @@
 /* global before it describe */
 import chai from 'chai';
-import getLogger from '../src/index.js';
+import { getLogger, initMorgan } from '../src/index.js';
 
 chai.should();
 
