@@ -1,6 +1,6 @@
 import Winston from 'winston';
 import 'winston-loggly';
-
+import morgan from 'morgan';
 
 const defaults = {
   console: {
@@ -136,4 +136,22 @@ function getLogger(opts = {}) {
   return new Winston.Logger({transports: getTransports(opts)});
 }
 
-export default getLogger;
+/**
+ * Set up default Morgan logging.
+ *
+ * @param {Object} logger Winston logger object for transport
+ */
+function initMorgan(logger) {
+  return morgan('combined', {
+    stream: {
+      write: (message, encoding) => {
+	logger.error(message);
+      }
+    },
+    skip: (req, res) => {
+      return res.statusCode < 400;
+    }
+  });
+}
+
+export { getLogger, initMorgan };
