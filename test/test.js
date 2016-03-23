@@ -16,43 +16,47 @@ describe('getLogger', () => {
 
   describe('with an environment', () => {
     describe('with production', () => {
-      let myLogger;
-      before(() => {
-        myLogger = getLogger({
-          env: 'production',
-          appTag: 'TEST',
-          token: 'TOKEN',
-          subdomain: 'SUBDOMAIN',
-        });
+      describe('with all the necessary Loggly options', () => {
+	let myLogger;
+	before(() => {
+          myLogger = getLogger({
+            env: 'production',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+          });
+	});
+	
+	it('only configures a loggly logger', () => {
+          Object.keys(myLogger.transports).length.should.equal(1);
+          Object.keys(myLogger.transports).should.eql(['loggly']);
+	});
+	
+	it('has the right token', () => {
+          myLogger.transports.loggly.client.token.should.equal('TOKEN');
+	});
+	
+	it('has the right subdomain', () => {
+          myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
+	});
+	
+	it('has the right tag', () => {
+          myLogger.transports.loggly.client.tags.should.include('TEST');
+	});
       });
 
-      it('only configures a loggly logger', () => {
-        Object.keys(myLogger.transports).length.should.equal(1);
-        Object.keys(myLogger.transports).should.eql(['loggly']);
-      });
-
-      it('has the right token', () => {
-        myLogger.transports.loggly.client.token.should.equal('TOKEN');
-      });
-
-      it('has the right subdomain', () => {
-        myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
-      });
-
-      it('has the right tag', () => {
-        myLogger.transports.loggly.client.tags.should.include('TEST');
-      });
-
-      describe('without all the necessary options', () => {
+      describe('without all the necessary Loggly options', () => {
 	describe('like missing the token', () => {
 	  it('should not raise an error', () => {
 	    (() => {
-	      const myLogger = getLogger({
-		env: 'qa',
+	      const myLogger2 = getLogger({
+		env: 'production',
 		appTag: 'TEST',
 		subdomain: 'SUBDOMAIN',
 		remote: true,
 	      });
+
+	      myLogger2.debug('test');
 	    }).should.not.throw(Error);
 	  });
 	});
