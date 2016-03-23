@@ -42,6 +42,21 @@ describe('getLogger', () => {
       it('has the right tag', () => {
         myLogger.transports.loggly.client.tags.should.include('TEST');
       });
+
+      describe('without all the necessary options', () => {
+	describe('like missing the token', () => {
+	  it('should not raise an error', () => {
+	    (() => {
+	      const myLogger = getLogger({
+		env: 'qa',
+		appTag: 'TEST',
+		subdomain: 'SUBDOMAIN',
+		remote: true,
+	      });
+	    }).should.not.throw(Error);
+	  });
+	});
+      });
     });
 
     describe('with qa', () => {
