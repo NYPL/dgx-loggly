@@ -63,27 +63,57 @@ describe('getLogger', () => {
       });
 
       describe('with the remote option', () => {
-        let myLogger;
+	describe('with the proper options', () => {
+          let myLogger;
 
-        before(() => {
-          myLogger = getLogger({
-            env: 'qa',
-            appTag: 'TEST',
-            token: 'TOKEN',
-            subdomain: 'SUBDOMAIN',
-            remote: true,
+          before(() => {
+            myLogger = getLogger({
+              env: 'qa',
+              appTag: 'TEST',
+              token: 'TOKEN',
+              subdomain: 'SUBDOMAIN',
+              remote: true,
+            });
           });
-        });
+	  
+          it('configures console and loggly loggers', () => {
+            Object.keys(myLogger.transports).length.should.equal(2);
+            Object.keys(myLogger.transports)
+              .should.have.members(['console', 'loggly']);
+          });
+	  
+          it('env tags', () => {
+            myLogger.transports.loggly.client.tags.should.include('TEST-qa');
+          });
+	});
 
-        it('configures console and loggly loggers', () => {
-          Object.keys(myLogger.transports).length.should.equal(2);
-          Object.keys(myLogger.transports)
-            .should.have.members(['console', 'loggly']);
-        });
+	describe('without all the necessary options', () => {
+	  describe('like missing the token', () => {
+	    it('should raise an error', () => {
+	      (() => {
+		const myLogger = getLogger({
+		  env: 'qa',
+		  appTag: 'TEST',
+		  subdomain: 'SUBDOMAIN',
+		  remote: true,
+		});
+	      }).should.throw(/Loggly Customer token is required./);
+	    });
+	  });
 
-        it('env tags', () => {
-          myLogger.transports.loggly.client.tags.should.include('TEST-qa');
-        });
+	  describe('or missing the subdomain', () => {
+	    it('should raise an error', () => {
+	      (() => {
+		const myLogger = getLogger({
+		  env: 'qa',
+		  appTag: 'TEST',
+		  token: 'TOKEN',
+		  remote: true,
+		});
+	      }).should.throw(/Loggly Subdomain is required/);
+	    });
+	  });
+	});
       });
     });
   });
