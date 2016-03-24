@@ -16,31 +16,50 @@ describe('getLogger', () => {
 
   describe('with an environment', () => {
     describe('with production', () => {
-      let myLogger;
-      before(() => {
-        myLogger = getLogger({
-          env: 'production',
-          appTag: 'TEST',
-          token: 'TOKEN',
-          subdomain: 'SUBDOMAIN',
-        });
+      describe('with all the necessary Loggly options', () => {
+	let myLogger;
+	before(() => {
+          myLogger = getLogger({
+            env: 'production',
+            appTag: 'TEST',
+            token: 'TOKEN',
+            subdomain: 'SUBDOMAIN',
+          });
+	});
+	
+	it('only configures a loggly logger', () => {
+          Object.keys(myLogger.transports).length.should.equal(1);
+          Object.keys(myLogger.transports).should.eql(['loggly']);
+	});
+	
+	it('has the right token', () => {
+          myLogger.transports.loggly.client.token.should.equal('TOKEN');
+	});
+	
+	it('has the right subdomain', () => {
+          myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
+	});
+	
+	it('has the right tag', () => {
+          myLogger.transports.loggly.client.tags.should.include('TEST');
+	});
       });
 
-      it('only configures a loggly logger', () => {
-        Object.keys(myLogger.transports).length.should.equal(1);
-        Object.keys(myLogger.transports).should.eql(['loggly']);
-      });
+      describe('without all the necessary Loggly options', () => {
+	describe('like missing the token', () => {
+	  it('should not raise an error', () => {
+	    (() => {
+	      const myLogger2 = getLogger({
+		env: 'production',
+		appTag: 'TEST',
+		subdomain: 'SUBDOMAIN',
+		remote: true,
+	      });
 
-      it('has the right token', () => {
-        myLogger.transports.loggly.client.token.should.equal('TOKEN');
-      });
-
-      it('has the right subdomain', () => {
-        myLogger.transports.loggly.client.subdomain.should.equal('SUBDOMAIN');
-      });
-
-      it('has the right tag', () => {
-        myLogger.transports.loggly.client.tags.should.include('TEST');
+	      myLogger2.debug('test');
+	    }).should.not.throw(Error);
+	  });
+	});
       });
     });
 
@@ -63,27 +82,57 @@ describe('getLogger', () => {
       });
 
       describe('with the remote option', () => {
-        let myLogger;
+	describe('with the proper options', () => {
+          let myLogger;
 
-        before(() => {
-          myLogger = getLogger({
-            env: 'qa',
-            appTag: 'TEST',
-            token: 'TOKEN',
-            subdomain: 'SUBDOMAIN',
-            remote: true,
+          before(() => {
+            myLogger = getLogger({
+              env: 'qa',
+              appTag: 'TEST',
+              token: 'TOKEN',
+              subdomain: 'SUBDOMAIN',
+              remote: true,
+            });
           });
-        });
+	  
+          it('configures console and loggly loggers', () => {
+            Object.keys(myLogger.transports).length.should.equal(2);
+            Object.keys(myLogger.transports)
+              .should.have.members(['console', 'loggly']);
+          });
+	  
+          it('env tags', () => {
+            myLogger.transports.loggly.client.tags.should.include('TEST-qa');
+          });
+	});
 
-        it('configures console and loggly loggers', () => {
-          Object.keys(myLogger.transports).length.should.equal(2);
-          Object.keys(myLogger.transports)
-            .should.have.members(['console', 'loggly']);
-        });
+	describe('without all the necessary options', () => {
+	  describe('like missing the token', () => {
+	    it('should raise an error', () => {
+	      (() => {
+		const myLogger = getLogger({
+		  env: 'qa',
+		  appTag: 'TEST',
+		  subdomain: 'SUBDOMAIN',
+		  remote: true,
+		});
+	      }).should.throw(/Loggly Customer token is required./);
+	    });
+	  });
 
-        it('env tags', () => {
-          myLogger.transports.loggly.client.tags.should.include('TEST-qa');
-        });
+	  describe('or missing the subdomain', () => {
+	    it('should raise an error', () => {
+	      (() => {
+		const myLogger = getLogger({
+		  env: 'qa',
+		  appTag: 'TEST',
+		  token: 'TOKEN',
+		  remote: true,
+		});
+	      }).should.throw(/Loggly Subdomain is required/);
+	    });
+	  });
+	});
       });
     });
   });

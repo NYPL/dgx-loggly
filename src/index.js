@@ -90,8 +90,12 @@ function getTransports(opts) {
   const { env, remote } = opts;
   if (env) {
     // Production apps should only use loggly
-    if (env === 'production') {
-      return [logglyConfig(opts)];
+    try {
+      if (env === 'production') {
+	return [logglyConfig(opts)];
+      }
+    } catch (e) {
+      return [];
     }
 
     // If it isn't production but the `remote` flag is set
