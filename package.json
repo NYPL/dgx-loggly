@@ -20,7 +20,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/NYPL/dgx-loggly.git"
+    "url": "git+https://github.com/NYPL/dgx-loggly.git"
   },
   "keywords": [
     "logging",
@@ -28,7 +28,7 @@
     "loggly"
   ],
   "bugs": {
-    "url": "https://bitbucket.org/NYPL/dgx-loggly/issues"
+    "url": "https://github.com/NYPL/dgx-loggly/issues"
   },
   "dependencies": {
     "morgan": "1.10.0",
