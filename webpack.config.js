@@ -1,12 +1,13 @@
-var webpack = require('webpack');
-var cleanBuild = require('clean-webpack-plugin');
-var path = require('path');
-var fs = require('fs');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 // Keep Node out of the build. See:
 // http://jlongster.com/Backend-Apps-with-Webpack--Part-I
 // https://github.com/webpack/webpack/issues/839
-var nodeModules = {};
+const nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function(x) {
     return ['.bin'].indexOf(x) === -1;
@@ -16,11 +17,10 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  context: __dirname + '/src',
-  entry: './index.js',
+  entry: path.resolve(__dirname, 'src/index.js'),
   output: {
     filename: 'index.min.js',
-    path: __dirname + '/dist',
+    path: path.join(__dirname, '/dist'),
     libraryTarget: "umd",
     // name of the global var
     library: "dgxLoggly"
@@ -28,10 +28,20 @@ module.exports = {
   target: "node",
   externals: nodeModules,
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx']
+  },
+  // Minification (Utilized in Production)
+  optimization: {
+    minimizer: [
+      new TerserWebpackPlugin({
+        terserOptions: {
+          warnings: false,
+        },
+      }),
+    ],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.json$/,
         loaders: ['json-loader']
@@ -45,13 +55,6 @@ module.exports = {
   },
   plugins: [
     // Cleans the Dist folder after every build.
-    new cleanBuild(['dist']),
-    // Minification (Utilized in Production)
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      compress: {
-        warnings: false
-      }
-    })
+    new CleanWebpackPlugin()
   ]
 };

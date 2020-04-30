@@ -35,7 +35,7 @@ Other environments can be configured to send messages to Loggly with the
 `remote: true` option. The environment name will be added to the tag
 (e.g. `DGX-App-qa`):
 
-    # Or other environments 
+    # Or other environments
 	const logger = getLogger({
 	  env: 'qa',
 	  appTag: 'DGX-App',
@@ -106,3 +106,11 @@ enable json logging for a loggly but not a console transport:
       loggly: { json: true, },
     });
 
+### Contributing to this repo
+* Create a feature branch from `development`
+* From the command line rebuild the `/dist` directory with `npm run build`.
+* Add & commit the new `/dist` folder and make the pull request
+  with `development` as the base.
+* Changes must be approved by a peer reviewer
+* Merge changes upon approval
+* Merge `development` into `master`
